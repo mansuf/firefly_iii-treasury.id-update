@@ -38,7 +38,7 @@ jobs:
 
       - name: Test docker image
         run: |
-          docker run --rm ${{ env.REPO }}:test
+          docker run --rm ${{ env.REPO }}:test --help
 
   docker-build-and-push:
     name: Docker build and push (hub.docker.com)
