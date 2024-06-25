@@ -10,5 +10,3 @@ RUN pip install .
 WORKDIR /downloads
 
 ENTRYPOINT [ "firefly-iii-treasury-update" ]
-
-CMD [ "--help" ]
