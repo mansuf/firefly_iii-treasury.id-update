@@ -24,10 +24,10 @@ docker pull mansuf/firefly_iii-treasury.id-update
 
 ```sh
 # With environments
-docker run --env-file .env mansuf/firefly_iii-treasury.id-update
+docker run --rm --env-file .env mansuf/firefly_iii-treasury.id-update
 
 # With CLI arguments
-docker run mansuf/firefly_iii-treasury.id-update --api-key "firefly-iii api key" --transaction-id "firefly-iii transaction id" --url "firefly-iii base url" --grams-gold "3"
+docker run --rm mansuf/firefly_iii-treasury.id-update --api-key "firefly-iii api key" --transaction-id "firefly-iii transaction id" --url "firefly-iii base url" --grams-gold "3"
 ```
 
 ### PyPI usage
