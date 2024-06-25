@@ -49,8 +49,7 @@ def execute_cli_main():
     parser.add_argument("--verbose", help="Enable verbose logging", action="store_true")
     parser.add_argument(
         "--load-dotenv",
-        help="Load required values from environment file, default to .env",
-        default=".env",
+        help="Load required values from environment file (for example: .env)",
     )
 
     args = parser.parse_args()

@@ -43,7 +43,7 @@ firefly-iii-treasury-update --api-key "firefly-iii api key" --transaction-id "fi
 # you can do this instead
 
 # For Windows
-py -3 -m firefly_iii_treasury_id_update --load-dotenv
+py -3 -m firefly_iii_treasury_id_update --load-dotenv .env
 
 # For Linux / Mac OS
 python3 -m firefly_iii_treasury_id_update --load-dotenv
