@@ -62,9 +62,19 @@ async def _run_main(http_session, grams_gold, api_key, transaction_id, firefly_i
                 )
                 continue
 
+            # Determine if grams_gold is a url location, a file, or just hardcoded numbers
+            if grams_gold.startswith("http"):
+                res = await http_session.get(grams_gold)
+                actual_gold = float(await res.text())
+            elif os.path.exists(grams_gold):
+                with open(grams_gold, "r") as o:
+                    actual_gold = float(o.read())
+            else:
+                actual_gold = float(grams_gold)
+
             data = json.loads(data["data"])
             selling_price = get_selling_price(data)
-            amount = int(selling_price * grams_gold)
+            amount = int(selling_price * actual_gold)
 
             # TODO: Create update request to REST API firefly-iii
             log.info(
@@ -98,16 +108,6 @@ async def run_main():
         raise MissingArguments("there is no FIREFLY_III_URL in environment")
     elif grams_gold is None:
         raise MissingArguments("there is no GRAMS_GOLD in environment")
-
-    # Determine if grams_gold is a url location, a file, or just hardcoded numbers
-    if grams_gold.startswith("http"):
-        res = await http_session.get(grams_gold)
-        grams_gold = float(await res.text())
-    elif os.path.exists(grams_gold):
-        with open(grams_gold, "r") as o:
-            grams_gold = float(o.read())
-    else:
-        grams_gold = float(grams_gold)
 
     while True:
         try:
