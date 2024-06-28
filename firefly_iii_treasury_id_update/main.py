@@ -13,7 +13,7 @@ from .exceptions import (
     MissingArguments,
 )
 from .firefly_iii import update_transaction
-from .utils import get_selling_price
+from .utils import get_selling_price, validate_bool
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +26,14 @@ def get_http_session() -> aiohttp.ClientSession:
     )
 
 
-async def _run_main(http_session, grams_gold, api_key, transaction_id, firefly_iii_url):
+async def _run_main(
+    http_session,
+    grams_gold,
+    api_key,
+    transaction_id,
+    firefly_iii_url,
+    update_date_transaction,
+):
     log.info("Establishing websocket connection")
     websocket_conn = await create_websockets_connection(http_session)
     async with websocket_conn as ws:
@@ -86,6 +93,7 @@ async def _run_main(http_session, grams_gold, api_key, transaction_id, firefly_i
                 api_key=api_key,
                 transaction_id=transaction_id,
                 amount=amount,
+                update_date=update_date_transaction,
             )
             log.info(
                 f"Successfully update transaction id = {transaction_id} with amount {amount}"
@@ -98,6 +106,7 @@ async def run_main():
     api_key = os.environ.get("FIREFLY_III_API_KEY")
     transaction_id = os.environ.get("FIREFLY_III_TRANSACTION_ID")
     firefly_iii_url = os.environ.get("FIREFLY_III_URL")
+    update_date_transaction = os.environ.get("FIREFLY_III_UPDATE_DATE_TRANSACTION")
     grams_gold = os.environ.get("GRAMS_GOLD")
 
     if api_key is None:
@@ -108,11 +117,22 @@ async def run_main():
         raise MissingArguments("there is no FIREFLY_III_URL in environment")
     elif grams_gold is None:
         raise MissingArguments("there is no GRAMS_GOLD in environment")
+    elif update_date_transaction is None:
+        raise MissingArguments(
+            "there is no FIREFLY_III_UPDATE_DATE_TRANSACTION in environment"
+        )
+
+    update_date_transaction = validate_bool(update_date_transaction)
 
     while True:
         try:
             await _run_main(
-                http_session, grams_gold, api_key, transaction_id, firefly_iii_url
+                http_session,
+                grams_gold,
+                api_key,
+                transaction_id,
+                firefly_iii_url,
+                update_date_transaction,
             )
         except Exception as e:
             log.error(
