@@ -3,7 +3,7 @@ Update gold price from https://treasury.id (via websocket) to firefly-iii (https
 """
 
 # fmt: off
-__version__ = "0.0.2"
+__version__ = "0.1.0"
 __description__ = "Update gold price from https://treasury.id (via websocket) to firefly-iii (https://firefly-iii.org) based how much grams you have"
 __author__ = "Rahman Yusuf"
 __author_email__ = "danipart4@gmail.com"
